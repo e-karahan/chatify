@@ -79,7 +79,7 @@ const Header = styled.div`
     display:flex;
     position:sticky;
     top:0;
-    background-color:red;
+    background-color:white;
     z-index:1;
     justify-content:space-between;
     align-items:center;
