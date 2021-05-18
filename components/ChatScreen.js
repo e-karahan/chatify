@@ -13,12 +13,36 @@ import firebase from "firebase";
 import Message from "./Message";
 import getRecipientEmail from "../utils/getRecipientEmail";
 import TimeAgo from "timeago-react";
+import { Picker } from "emoji-mart";
+import "emoji-mart/css/emoji-mart.css";
 
 function ChatScreen({chat,messages}) {
+
     const [user] = useAuthState(auth);
     const [input,setInput] = useState("");
     const router = useRouter();
     const endOfMessagesRef = useRef(null);
+
+    // emoji stage
+    const [emojiPickerState,SetEmojiPicker]=useState(false);
+    let emojiPicker;
+    if(emojiPickerState){
+        emojiPicker=(
+            <Picker
+                title="İstedğin Emojiyi Seçebilirsin"
+                emoji="point_up"
+                onSelect={emoji=>setInput(input + emoji.native)}
+                perLine="12"
+            />
+        );
+    }
+
+    function triggerPicker(event){
+        event.preventDefault();
+        SetEmojiPicker(!emojiPickerState);
+    }
+
+
     const [messagesSnapshot] = useCollection(
     db
         .collection("chats")
@@ -129,8 +153,9 @@ function ChatScreen({chat,messages}) {
             </MessageContainer>
             <InputContainer>
 
-            <InsertEmoticonIcon/>
+            <InsertEmoticonIcon onClick={triggerPicker}/>
             <Input value={input} onChange={e => setInput(e.target.value)}/>
+            {emojiPicker}
             <button hidden disabled={!input} type="submit" onClick={sendMessage}>Send Message</button>
             
             <MicIcon/>
@@ -154,6 +179,7 @@ const Input = styled.input`
     padding:20px;
     margin-left:15px;
     margin-right:15px;
+    font-size:18px;
     
 `;
 

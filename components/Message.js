@@ -2,13 +2,14 @@ import styled from "styled-components";
 import {useAuthState} from "react-firebase-hooks/auth";
 import {auth} from "../firebase";
 import moment from "moment";
+import ReactEmoji from 'react-emoji';
 
 function Message({user,message}) {
     const [userLoggedIn] = useAuthState(auth);
     const TypeOfMessage = user === userLoggedIn.email ? Sender : Reciever;
     return (
        <Container>
-           <TypeOfMessage>{message.message}
+           <TypeOfMessage>{ReactEmoji.emojify(message.message)}
            <Timestamp>{message.timestamp ? moment(message.timestamp).format('LT') : '...'}</Timestamp>
            
            </TypeOfMessage>
